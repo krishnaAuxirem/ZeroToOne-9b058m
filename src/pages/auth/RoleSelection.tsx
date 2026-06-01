@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Rocket, Star, TrendingUp, Users, Shield, ArrowRight } from 'lucide-react';
+import { Rocket, Star, TrendingUp, Users, ArrowRight, ShieldAlert, LogIn } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
 import { toast } from 'sonner';
@@ -16,7 +16,6 @@ const ROLES = [
     color: 'blue',
     gradient: 'from-blue-600/20 to-blue-600/5',
     border: 'border-blue-500/40',
-    glow: 'glow-blue',
   },
   {
     role: 'mentor' as UserRole,
@@ -27,7 +26,6 @@ const ROLES = [
     color: 'purple',
     gradient: 'from-purple-600/20 to-purple-600/5',
     border: 'border-purple-500/40',
-    glow: '',
   },
   {
     role: 'investor' as UserRole,
@@ -38,7 +36,6 @@ const ROLES = [
     color: 'green',
     gradient: 'from-green-600/20 to-green-600/5',
     border: 'border-green-500/40',
-    glow: '',
   },
   {
     role: 'team' as UserRole,
@@ -49,35 +46,36 @@ const ROLES = [
     color: 'orange',
     gradient: 'from-orange-600/20 to-orange-600/5',
     border: 'border-orange-500/40',
-    glow: '',
-  },
-  {
-    role: 'admin' as UserRole,
-    icon: Shield,
-    label: 'Platform Admin',
-    description: 'Manage the ecosystem, verify stakeholders, and monitor platform growth.',
-    features: ['User Management', 'Content Moderation', 'Analytics', 'Platform Settings'],
-    color: 'red',
-    gradient: 'from-red-600/20 to-red-600/5',
-    border: 'border-red-500/40',
-    glow: '',
   },
 ];
 
 const RoleSelection = () => {
-  const { user, setRole } = useAuth();
+  const { user, setRole, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
+  // Guard: must be authenticated (ProtectedRoute also handles this, but double-check)
+  if (!isAuthenticated) {
+    navigate('/login', { replace: true });
+    return null;
+  }
+
   const handleSelect = (role: UserRole) => {
+    // Admin role cannot be self-assigned from role selection
+    if (role === 'admin') {
+      toast.error('Admin access requires special credentials. Please contact support.');
+      return;
+    }
+
     setRole(role);
+
     const paths: Record<string, string> = {
       founder: '/dashboard/founder',
       mentor: '/dashboard/mentor',
       investor: '/dashboard/investor',
       team: '/dashboard/team',
-      admin: '/dashboard/admin',
     };
-    toast.success(`Welcome, ${role.charAt(0).toUpperCase() + role.slice(1)}!`);
+
+    toast.success(`Welcome, ${role.charAt(0).toUpperCase() + role.slice(1)}! Redirecting to your dashboard...`);
     navigate(paths[role]);
   };
 
@@ -94,14 +92,17 @@ const RoleSelection = () => {
           </div>
           <h1 className="text-4xl font-bold text-white mb-3">How are you building?</h1>
           <p className="text-white/50 text-lg max-w-lg mx-auto">
-            Select your role to get a personalized experience tailored to your journey.
+            Select your role to get a personalized dashboard experience.
           </p>
           {user && (
-            <p className="mt-2 text-blue-400 text-sm">Welcome, {user.name}! You can change this anytime from settings.</p>
+            <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+              <div className="w-2 h-2 rounded-full bg-green-400" />
+              <span className="text-green-300 text-sm font-medium">Signed in as {user.name} · {user.email}</span>
+            </div>
           )}
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 xl:gap-5">
           {ROLES.map((r, i) => {
             const Icon = r.icon;
             return (
@@ -136,6 +137,17 @@ const RoleSelection = () => {
             );
           })}
         </div>
+
+        {/* Admin notice */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6 flex items-center gap-3 p-4 rounded-xl border border-white/10 bg-white/5 text-white/40 text-sm"
+        >
+          <ShieldAlert className="w-4 h-4 text-red-400 flex-shrink-0" />
+          <span>Admin access is not available via role selection. Admin accounts require dedicated credentials. <a href="/login" className="text-red-400 underline">Sign in with admin credentials</a>.</span>
+        </motion.div>
       </div>
     </div>
   );

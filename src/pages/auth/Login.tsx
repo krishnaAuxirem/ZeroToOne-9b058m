@@ -18,6 +18,15 @@ const Login = () => {
 
   const from = (location.state as any)?.from?.pathname;
 
+  // Role-to-dashboard map for users that already have a role assigned
+  const dashboardPaths: Record<string, string> = {
+    founder: '/dashboard/founder',
+    mentor: '/dashboard/mentor',
+    investor: '/dashboard/investor',
+    team: '/dashboard/team',
+    admin: '/dashboard/admin',
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -25,8 +34,37 @@ const Login = () => {
     setIsLoading(false);
     if (result.success) {
       toast.success('Welcome back!');
-      if (from) navigate(from, { replace: true });
-      else navigate('/role-selection');
+      // If there was an intended destination (from ProtectedRoute), go there
+      if (from && from !== '/login' && from !== '/role-selection') {
+        navigate(from, { replace: true });
+      } else {
+        // Demo users have pre-assigned roles — send them straight to their dashboard
+        // New users go to role-selection to pick their role
+        // We re-read from localStorage since state updates asynchronously
+        try {
+          const stored = localStorage.getItem('zerotoone_user');
+          if (stored) {
+            const u = JSON.parse(stored);
+            if (u.role && dashboardPaths[u.role]) {
+              // Admin always goes to admin dashboard directly
+              // Other demo users with assigned roles go to their dashboard
+              // Newly registered users (role defaults to 'founder') go to role-selection
+              const isNewUser = u.id && u.id.startsWith('user_');
+              if (isNewUser) {
+                navigate('/role-selection', { replace: true });
+              } else {
+                navigate(dashboardPaths[u.role], { replace: true });
+              }
+            } else {
+              navigate('/role-selection', { replace: true });
+            }
+          } else {
+            navigate('/role-selection', { replace: true });
+          }
+        } catch {
+          navigate('/role-selection', { replace: true });
+        }
+      }
     } else {
       toast.error(result.error || 'Login failed');
     }

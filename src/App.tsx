@@ -11,6 +11,7 @@ import ProtectedRoute from "@/components/features/ProtectedRoute";
 // Public Pages
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import AccessDenied from "./pages/AccessDenied";
 import About from "./pages/About";
 import Pricing from "./pages/Pricing";
 import Blog from "./pages/Blog";
@@ -214,6 +215,7 @@ const App = () => (
               <Route path="/dashboard/admin/analytics" element={<ProtectedRoute allowedRoles={['admin']}><AdminAnalytics /></ProtectedRoute>} />
               <Route path="/dashboard/admin/settings" element={<ProtectedRoute allowedRoles={['admin']}><AdminSettings /></ProtectedRoute>} />
 
+              <Route path="/access-denied" element={<AccessDenied />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
