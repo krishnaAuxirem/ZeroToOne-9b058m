@@ -122,8 +122,6 @@ const App = () => (
               <Route path="/success-stories" element={<SuccessStories />} />
               <Route path="/startup-academy" element={<StartupAcademy />} />
               <Route path="/startup-showcase" element={<StartupShowcase />} />
-              <Route path="/idea-validation" element={<Index />} />
-              <Route path="/ai-copilot" element={<Index />} />
 
               {/* ── STATIC ── */}
               <Route path="/privacy" element={<PrivacyPage />} />
@@ -142,7 +140,7 @@ const App = () => (
               <Route path="/role-selection" element={<ProtectedRoute><RoleSelection /></ProtectedRoute>} />
 
               {/* ══════════════════════════════════════
-                  MENTOR DASHBOARD ROUTES
+                  MENTOR DASHBOARD — 12 UNIQUE ROUTES
               ══════════════════════════════════════ */}
               <Route path="/dashboard/mentor" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorDashboard /></ProtectedRoute>} />
               <Route path="/dashboard/mentor/profile" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorProfile /></ProtectedRoute>} />
@@ -156,12 +154,9 @@ const App = () => (
               <Route path="/dashboard/mentor/messages" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorMessages /></ProtectedRoute>} />
               <Route path="/dashboard/mentor/analytics" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorAnalytics /></ProtectedRoute>} />
               <Route path="/dashboard/mentor/settings" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorSettings /></ProtectedRoute>} />
-              {/* legacy alias routes */}
-              <Route path="/dashboard/mentor/requests" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorConsultationRequests /></ProtectedRoute>} />
-              <Route path="/dashboard/mentor/sessions" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorOneToOneSessions /></ProtectedRoute>} />
 
               {/* ══════════════════════════════════════
-                  FOUNDER DASHBOARD ROUTES
+                  FOUNDER DASHBOARD — 13 UNIQUE ROUTES
               ══════════════════════════════════════ */}
               <Route path="/dashboard/founder" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderDashboard /></ProtectedRoute>} />
               <Route path="/dashboard/founder/startup-validation" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderStartupValidation /></ProtectedRoute>} />
@@ -176,17 +171,9 @@ const App = () => (
               <Route path="/dashboard/founder/analytics" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderAnalytics /></ProtectedRoute>} />
               <Route path="/dashboard/founder/profile" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderProfile /></ProtectedRoute>} />
               <Route path="/dashboard/founder/settings" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderSettings /></ProtectedRoute>} />
-              {/* legacy alias routes */}
-              <Route path="/dashboard/founder/idea-validation" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderStartupValidation /></ProtectedRoute>} />
-              <Route path="/dashboard/founder/mentors" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderMentorBooking /></ProtectedRoute>} />
-              <Route path="/dashboard/founder/investors" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderFundraising /></ProtectedRoute>} />
-              <Route path="/dashboard/founder/team" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderTeamBuilding /></ProtectedRoute>} />
-              {['startup','market-analysis','competitor-analysis','swot','bmc','lean-canvas','revenue','financials','roadmap','cofounder','pitch-deck','tasks','milestones','okrs','documents'].map(sub => (
-                <Route key={sub} path={`/dashboard/founder/${sub}`} element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderDashboard /></ProtectedRoute>} />
-              ))}
 
               {/* ══════════════════════════════════════
-                  INVESTOR DASHBOARD ROUTES
+                  INVESTOR DASHBOARD — 9 UNIQUE ROUTES
               ══════════════════════════════════════ */}
               <Route path="/dashboard/investor" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorDashboard /></ProtectedRoute>} />
               <Route path="/dashboard/investor/profile" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorProfile /></ProtectedRoute>} />
@@ -197,16 +184,9 @@ const App = () => (
               <Route path="/dashboard/investor/opportunities" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorOpportunities /></ProtectedRoute>} />
               <Route path="/dashboard/investor/analytics" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorAnalytics /></ProtectedRoute>} />
               <Route path="/dashboard/investor/settings" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorSettings /></ProtectedRoute>} />
-              {/* legacy alias routes */}
-              <Route path="/dashboard/investor/discover" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorStartupDiscovery /></ProtectedRoute>} />
-              <Route path="/dashboard/investor/showcase" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorStartupShowcase /></ProtectedRoute>} />
-              <Route path="/dashboard/investor/pitches" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorPitchReview /></ProtectedRoute>} />
-              {['portfolio','meetings','saved'].map(sub => (
-                <Route key={sub} path={`/dashboard/investor/${sub}`} element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorDashboard /></ProtectedRoute>} />
-              ))}
 
               {/* ══════════════════════════════════════
-                  TEAM DASHBOARD ROUTES
+                  TEAM DASHBOARD — 9 UNIQUE ROUTES
               ══════════════════════════════════════ */}
               <Route path="/dashboard/team" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamDashboard /></ProtectedRoute>} />
               <Route path="/dashboard/team/projects" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamProjects /></ProtectedRoute>} />
@@ -217,14 +197,9 @@ const App = () => (
               <Route path="/dashboard/team/progress" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamProgress /></ProtectedRoute>} />
               <Route path="/dashboard/team/messages" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamMessages /></ProtectedRoute>} />
               <Route path="/dashboard/team/settings" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamSettings /></ProtectedRoute>} />
-              {/* legacy alias routes */}
-              <Route path="/dashboard/team/chat" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamCollaboration /></ProtectedRoute>} />
-              {['profile','roadmaps','calendar','activity'].map(sub => (
-                <Route key={sub} path={`/dashboard/team/${sub}`} element={<ProtectedRoute allowedRoles={['team','admin']}><TeamDashboard /></ProtectedRoute>} />
-              ))}
 
               {/* ══════════════════════════════════════
-                  ADMIN DASHBOARD ROUTES
+                  ADMIN DASHBOARD — 12 UNIQUE ROUTES
               ══════════════════════════════════════ */}
               <Route path="/dashboard/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
               <Route path="/dashboard/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><AdminUsers /></ProtectedRoute>} />
@@ -238,9 +213,6 @@ const App = () => (
               <Route path="/dashboard/admin/revenue" element={<ProtectedRoute allowedRoles={['admin']}><AdminRevenue /></ProtectedRoute>} />
               <Route path="/dashboard/admin/analytics" element={<ProtectedRoute allowedRoles={['admin']}><AdminAnalytics /></ProtectedRoute>} />
               <Route path="/dashboard/admin/settings" element={<ProtectedRoute allowedRoles={['admin']}><AdminSettings /></ProtectedRoute>} />
-              {/* legacy alias routes */}
-              <Route path="/dashboard/admin/blog" element={<ProtectedRoute allowedRoles={['admin']}><AdminBlogs /></ProtectedRoute>} />
-              <Route path="/dashboard/admin/security" element={<ProtectedRoute allowedRoles={['admin']}><AdminSettings /></ProtectedRoute>} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
