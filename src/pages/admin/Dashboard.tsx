@@ -1,233 +1,108 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Users, TrendingUp, DollarSign, Shield, BarChart3, Plus, Edit, Trash2, CheckCircle, XCircle, Eye, Search, Filter } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
+import { Users, TrendingUp, DollarSign, BarChart3, AlertCircle, CheckCircle, UserPlus, Shield } from 'lucide-react';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import StatCard from '@/components/features/StatCard';
-import { BLOG_POSTS, MENTORS, DEMO_USERS } from '@/lib/mockData';
 import { toast } from 'sonner';
 
-const PLATFORM_STATS = [
-  { month: 'Jan', users: 8200, revenue: 980000 },
-  { month: 'Feb', users: 11400, revenue: 1340000 },
-  { month: 'Mar', users: 15600, revenue: 1820000 },
-  { month: 'Apr', users: 22000, revenue: 2600000 },
-  { month: 'May', users: 31000, revenue: 3400000 },
-  { month: 'Jun', users: 42000, revenue: 4800000 },
+const USER_GROWTH = [
+  { month: 'Jan', founders: 3200, mentors: 180, investors: 95 },
+  { month: 'Feb', founders: 4800, mentors: 220, investors: 120 },
+  { month: 'Mar', founders: 6500, mentors: 290, investors: 155 },
+  { month: 'Apr', founders: 9200, mentors: 350, investors: 190 },
+  { month: 'May', founders: 12400, mentors: 420, investors: 240 },
+  { month: 'Jun', founders: 16000, mentors: 500, investors: 285 },
 ];
 
-const PENDING_VERIFICATIONS = [
-  { id: 1, name: 'Dr. Meera Joshi', type: 'Mentor', applied: '2 days ago', expertise: 'FinTech', status: 'pending' },
-  { id: 2, name: 'Rahul Kapoor', type: 'Investor', applied: '3 days ago', firm: 'Alpha Fund', status: 'pending' },
-  { id: 3, name: 'TechVision Startup', type: 'Startup', applied: '1 day ago', industry: 'SaaS', status: 'pending' },
-  { id: 4, name: 'Priya Sharma', type: 'Mentor', applied: '4 days ago', expertise: 'Marketing', status: 'pending' },
+const REVENUE_DATA = [
+  { month: 'Jan', revenue: 245000 }, { month: 'Feb', revenue: 312000 },
+  { month: 'Mar', revenue: 428000 }, { month: 'Apr', revenue: 521000 },
+  { month: 'May', revenue: 698000 }, { month: 'Jun', revenue: 845000 },
 ];
 
-const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState<'users' | 'blog' | 'verifications'>('users');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [verifications, setVerifications] = useState(PENDING_VERIFICATIONS);
-  const [blogs, setBlogs] = useState(BLOG_POSTS);
+const RECENT_ACTIVITY = [
+  { type: 'signup', text: 'New founder registered: Priya Sharma (HealthBuddy)', time: '2 min ago', urgent: false },
+  { type: 'report', text: 'Blog post flagged for review: "Startup Funding Guide"', time: '15 min ago', urgent: true },
+  { type: 'mentor', text: 'New mentor verification request: Dr. Amit Desai', time: '1h ago', urgent: false },
+  { type: 'payment', text: 'Revenue milestone: ₹50L MRR achieved!', time: '2h ago', urgent: false },
+  { type: 'report', text: 'Community post reported by 3 users', time: '3h ago', urgent: true },
+];
 
-  const handleVerify = (id: number, action: 'approve' | 'reject') => {
-    setVerifications(prev => prev.map(v => v.id === id ? { ...v, status: action === 'approve' ? 'approved' : 'rejected' } : v));
-    toast.success(action === 'approve' ? 'Account approved and notified!' : 'Account rejected');
-  };
-
-  const handleDeleteBlog = (id: string) => {
-    setBlogs(prev => prev.filter(b => b.id !== id));
-    toast.success('Blog post deleted');
-  };
-
-  const filteredUsers = DEMO_USERS.filter(u => u.name.toLowerCase().includes(searchQuery.toLowerCase()) || u.email.toLowerCase().includes(searchQuery.toLowerCase()));
-
-  return (
-    <DashboardLayout title="Admin Dashboard">
+const AdminDashboard = () => (
+  <DashboardLayout title="Admin Dashboard">
+    <div className="space-y-6">
       {/* Banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-red-700 to-rose-800 p-6 mb-6 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          {[...Array(8)].map((_, i) => <div key={i} className="absolute rounded-full bg-white" style={{ width: 70 + i * 15, height: 70 + i * 15, top: `${i * 12}%`, right: `${i * 8}%` }} />)}
-        </div>
-        <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <p className="text-red-100 text-sm mb-1 flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" /> Platform Administration</p>
-            <h1 className="text-2xl font-bold text-white">ZeroToOne Admin Panel</h1>
-            <p className="text-red-100 text-sm mt-1"><span className="text-white font-bold">4 pending verifications</span> · <span className="text-white font-bold">50,000+ total users</span></p>
-          </div>
-          <button onClick={() => toast.success('Generating platform report...')} className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white text-red-700 text-sm font-bold hover:bg-red-50 transition-all">
-            <BarChart3 className="w-4 h-4" /> Generate Report
-          </button>
+      <div className="rounded-2xl bg-gradient-to-r from-red-700 to-rose-800 p-6 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">{[...Array(6)].map((_, i) => <div key={i} className="absolute rounded-full bg-white" style={{ width: 60 + i * 20, height: 60 + i * 20, top: `${i * 15}%`, right: `${i * 8}%` }} />)}</div>
+        <div className="relative">
+          <p className="text-red-200 text-sm mb-1">ZeroToOne Admin Console</p>
+          <h1 className="text-2xl font-bold text-white">Platform Overview</h1>
+          <p className="text-red-200 text-sm mt-1"><span className="text-white font-bold">2 urgent items</span> need your attention today</p>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard title="Total Users" value="50,247" change="+2.4k this week" changeType="positive" icon={Users} iconColor="text-blue-500" gradient="from-blue-500/10 to-blue-500/5" delay={0} />
-        <StatCard title="Platform Revenue" value="₹48L" change="+22% MoM" changeType="positive" icon={DollarSign} iconColor="text-green-500" gradient="from-green-500/10 to-green-500/5" delay={0.1} />
-        <StatCard title="Active Startups" value="3,847" change="+180 this month" changeType="positive" icon={TrendingUp} iconColor="text-orange-500" gradient="from-orange-500/10 to-orange-500/5" delay={0.2} />
-        <StatCard title="Verified Mentors" value="487" change="4 pending review" changeType="neutral" icon={Shield} iconColor="text-purple-500" gradient="from-purple-500/10 to-purple-500/5" delay={0.3} />
+      {/* KPIs */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard title="Total Users" value="50,000+" change="+18% MoM" changeType="positive" icon={Users} iconColor="text-blue-500" gradient="from-blue-500/10 to-blue-500/5" delay={0} />
+        <StatCard title="MRR" value="₹8.45L" change="+22% MoM" changeType="positive" icon={DollarSign} iconColor="text-green-500" gradient="from-green-500/10 to-green-500/5" delay={0.1} />
+        <StatCard title="Sessions This Month" value="1,248" change="+31% YoY" changeType="positive" icon={BarChart3} iconColor="text-purple-500" gradient="from-purple-500/10 to-purple-500/5" delay={0.2} />
+        <StatCard title="Pending Reviews" value="7" change="2 urgent" changeType="negative" icon={AlertCircle} iconColor="text-orange-500" gradient="from-orange-500/10 to-orange-500/5" delay={0.3} />
       </div>
 
-      {/* Platform Growth */}
-      <div className="rounded-2xl border border-border bg-card p-5 mb-6">
-        <h2 className="font-semibold text-foreground mb-4">Platform Growth</h2>
-        <ResponsiveContainer width="100%" height={220}>
-          <AreaChart data={PLATFORM_STATS} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-            <defs>
-              <linearGradient id="usersGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#EF4444" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#EF4444" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="revGrad2" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-            <XAxis dataKey="month" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
-            <YAxis yAxisId="left" tickFormatter={v => `${(v/1000).toFixed(0)}k`} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
-            <YAxis yAxisId="right" orientation="right" tickFormatter={v => `₹${(v/100000).toFixed(0)}L`} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
-            <Tooltip contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 12, fontSize: 12 }} />
-            <Area yAxisId="left" type="monotone" dataKey="users" stroke="#EF4444" strokeWidth={2} fill="url(#usersGrad)" name="Users" />
-            <Area yAxisId="right" type="monotone" dataKey="revenue" stroke="#3B82F6" strokeWidth={2} fill="url(#revGrad2)" name="Revenue" />
-          </AreaChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Tabs */}
-      <div className="flex gap-2 mb-4">
-        {([
-          { key: 'verifications', label: 'Verifications', count: verifications.filter(v => v.status === 'pending').length },
-          { key: 'users', label: 'Users' },
-          { key: 'blog', label: 'Blog Management' },
-        ] as const).map(t => (
-          <button key={t.key} onClick={() => setActiveTab(t.key)} className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeTab === t.key ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}>
-            {t.label}
-            {'count' in t && t.count > 0 && <span className="w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">{t.count}</span>}
-          </button>
-        ))}
-      </div>
-
-      {/* Verifications */}
-      {activeTab === 'verifications' && (
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="rounded-2xl border border-border bg-card p-5">
-          <h2 className="font-semibold text-foreground mb-4">Pending Verifications</h2>
-          <div className="space-y-3">
-            {verifications.map((v) => (
-              <div key={v.id} className="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 transition-all">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${v.type === 'Mentor' ? 'bg-yellow-500/10' : v.type === 'Investor' ? 'bg-green-500/10' : 'bg-blue-500/10'}`}>
-                  <Shield className={`w-5 h-5 ${v.type === 'Mentor' ? 'text-yellow-500' : v.type === 'Investor' ? 'text-green-500' : 'text-blue-500'}`} />
-                </div>
-                <div className="flex-1">
-                  <p className="font-semibold text-foreground text-sm">{v.name}</p>
-                  <p className="text-xs text-muted-foreground">{v.type} · Applied {v.applied}</p>
-                </div>
-                <span className={`px-2 py-0.5 rounded-full text-xs ${
-                  v.status === 'pending' ? 'bg-orange-500/10 text-orange-500' :
-                  v.status === 'approved' ? 'bg-green-500/10 text-green-500' :
-                  'bg-red-500/10 text-red-500'
-                }`}>{v.status}</span>
-                {v.status === 'pending' && (
-                  <div className="flex gap-2">
-                    <button onClick={() => handleVerify(v.id, 'approve')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-500/10 text-green-500 hover:bg-green-500 hover:text-white text-xs font-semibold transition-all">
-                      <CheckCircle className="w-3.5 h-3.5" /> Approve
-                    </button>
-                    <button onClick={() => handleVerify(v.id, 'reject')} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white text-xs font-semibold transition-all">
-                      <XCircle className="w-3.5 h-3.5" /> Reject
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Users */}
-      {activeTab === 'users' && (
-        <div className="rounded-2xl border border-border bg-card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-foreground">User Management</h2>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-              <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search users..." className="pl-8 pr-4 py-2 rounded-xl border border-border bg-background text-sm text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary w-48" />
-            </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  {['Name', 'Email', 'Role', 'Location', 'Joined', 'Actions'].map(h => (
-                    <th key={h} className="pb-3 text-left text-xs font-semibold text-muted-foreground">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-muted/30 transition-all">
-                    <td className="py-3 pr-4">
-                      <div className="flex items-center gap-2.5">
-                        <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full bg-muted" />
-                        <span className="text-sm font-medium text-foreground">{u.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-3 pr-4 text-xs text-muted-foreground">{u.email}</td>
-                    <td className="py-3 pr-4">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium capitalize ${
-                        u.role === 'founder' ? 'bg-blue-500/10 text-blue-500' :
-                        u.role === 'mentor' ? 'bg-yellow-500/10 text-yellow-500' :
-                        u.role === 'investor' ? 'bg-green-500/10 text-green-500' :
-                        u.role === 'admin' ? 'bg-red-500/10 text-red-500' :
-                        'bg-orange-500/10 text-orange-500'
-                      }`}>{u.role}</span>
-                    </td>
-                    <td className="py-3 pr-4 text-xs text-muted-foreground">{u.location}</td>
-                    <td className="py-3 pr-4 text-xs text-muted-foreground">{u.createdAt}</td>
-                    <td className="py-3">
-                      <div className="flex gap-2">
-                        <button onClick={() => toast.info(`Viewing ${u.name}'s profile`)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all"><Eye className="w-3.5 h-3.5" /></button>
-                        <button onClick={() => toast.info(`Editing ${u.name}'s account`)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all"><Edit className="w-3.5 h-3.5" /></button>
-                        <button onClick={() => toast.error(`Are you sure? This would delete ${u.name}`)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-all"><Trash2 className="w-3.5 h-3.5" /></button>
-                      </div>
-                    </td>
-                  </tr>
+          <h3 className="font-semibold text-foreground mb-4">User Growth by Role</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <AreaChart data={USER_GROWTH}>
+              <defs>
+                {[['founderG', '#3B82F6'], ['mentorG', '#8B5CF6'], ['investorG', '#22c55e']].map(([id, color]) => (
+                  <linearGradient key={id} id={id} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor={color} stopOpacity={0.3} /><stop offset="95%" stopColor={color} stopOpacity={0} />
+                  </linearGradient>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="month" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+              <YAxis tickFormatter={v => `${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+              <Tooltip contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }} />
+              <Area type="monotone" dataKey="founders" stroke="#3B82F6" fill="url(#founderG)" strokeWidth={2} name="Founders" />
+              <Area type="monotone" dataKey="mentors" stroke="#8B5CF6" fill="url(#mentorG)" strokeWidth={2} name="Mentors" />
+              <Area type="monotone" dataKey="investors" stroke="#22c55e" fill="url(#investorG)" strokeWidth={2} name="Investors" />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
-      )}
-
-      {/* Blog */}
-      {activeTab === 'blog' && (
         <div className="rounded-2xl border border-border bg-card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-foreground">Blog Management</h2>
-            <button onClick={() => toast.success('Opening blog editor...')} className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-all">
-              <Plus className="w-4 h-4" /> New Post
-            </button>
-          </div>
-          <div className="space-y-3">
-            {blogs.map((post) => (
-              <div key={post.id} className="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/30 transition-all">
-                <img src={post.thumbnail} alt={post.title} className="w-16 h-10 rounded-lg object-cover flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-foreground text-sm truncate">{post.title}</p>
-                  <p className="text-xs text-muted-foreground">{post.author} · {post.publishedAt} · {post.views.toLocaleString()} views</p>
-                </div>
-                <span className="px-2 py-0.5 rounded-full bg-muted text-muted-foreground text-xs">{post.category}</span>
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${post.featured ? 'bg-orange-500/10 text-orange-500' : 'bg-green-500/10 text-green-500'}`}>{post.featured ? 'Featured' : 'Published'}</span>
-                <div className="flex gap-2">
-                  <button onClick={() => toast.info('Opening editor...')} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all"><Edit className="w-3.5 h-3.5" /></button>
-                  <button onClick={() => handleDeleteBlog(post.id)} className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-all"><Trash2 className="w-3.5 h-3.5" /></button>
-                </div>
-              </div>
-            ))}
-          </div>
+          <h3 className="font-semibold text-foreground mb-4">Monthly Revenue (₹)</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={REVENUE_DATA}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis dataKey="month" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+              <YAxis tickFormatter={v => `₹${(v / 100000).toFixed(1)}L`} tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} />
+              <Tooltip formatter={(v: number) => [`₹${v.toLocaleString('en-IN')}`]} contentStyle={{ background: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: 8, fontSize: 12 }} />
+              <Bar dataKey="revenue" fill="#ef4444" radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
-      )}
-    </DashboardLayout>
-  );
-};
+      </div>
+
+      {/* Recent Activity */}
+      <div className="rounded-2xl border border-border bg-card p-5">
+        <h3 className="font-semibold text-foreground mb-4">Recent Platform Activity</h3>
+        <div className="space-y-3">
+          {RECENT_ACTIVITY.map((a, i) => (
+            <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+              className={`flex items-center gap-3 p-3 rounded-xl border ${a.urgent ? 'border-red-500/20 bg-red-500/5' : 'border-border'}`}>
+              {a.urgent ? <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" /> : <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />}
+              <p className="flex-1 text-sm text-foreground">{a.text}</p>
+              <span className="text-xs text-muted-foreground flex-shrink-0">{a.time}</span>
+              {a.urgent && <button onClick={() => toast.success('Item reviewed!')} className="px-3 py-1 rounded-lg bg-red-500 text-white text-xs font-semibold hover:bg-red-400 transition-all">Review</button>}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </DashboardLayout>
+);
 
 export default AdminDashboard;

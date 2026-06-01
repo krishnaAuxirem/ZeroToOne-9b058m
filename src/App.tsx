@@ -31,13 +31,70 @@ import Login from "./pages/auth/Login";
 import RoleSelection from "./pages/auth/RoleSelection";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 
-// Dashboard Pages
-import FounderDashboard from "./pages/founder/Dashboard";
-import FounderAICopilot from "./pages/founder/AICopilot";
+// ── MENTOR PAGES ──
 import MentorDashboard from "./pages/mentor/Dashboard";
+import MentorProfile from "./pages/mentor/Profile";
+import MentorConsultationRequests from "./pages/mentor/ConsultationRequests";
+import MentorBookings from "./pages/mentor/Bookings";
+import MentorOneToOneSessions from "./pages/mentor/OneToOneSessions";
+import MentorGroupSessions from "./pages/mentor/GroupSessions";
+import MentorReviews from "./pages/mentor/Reviews";
+import MentorRevenue from "./pages/mentor/Revenue";
+import MentorAvailability from "./pages/mentor/Availability";
+import MentorMessages from "./pages/mentor/Messages";
+import MentorAnalytics from "./pages/mentor/Analytics";
+import MentorSettings from "./pages/mentor/Settings";
+
+// ── FOUNDER PAGES ──
+import FounderDashboard from "./pages/founder/Dashboard";
+import FounderStartupValidation from "./pages/founder/StartupValidation";
+import FounderBusinessPlan from "./pages/founder/BusinessPlan";
+import FounderAICopilot from "./pages/founder/AICopilot";
+import FounderTeamBuilding from "./pages/founder/TeamBuilding";
+import FounderAcademy from "./pages/founder/Academy";
+import FounderMentorBooking from "./pages/founder/MentorBooking";
+import FounderFundraising from "./pages/founder/Fundraising";
+import FounderExecutionWorkspace from "./pages/founder/ExecutionWorkspace";
+import FounderCommunity from "./pages/founder/Community";
+import FounderAnalytics from "./pages/founder/Analytics";
+import FounderProfile from "./pages/founder/Profile";
+import FounderSettings from "./pages/founder/Settings";
+
+// ── INVESTOR PAGES ──
 import InvestorDashboard from "./pages/investor/Dashboard";
+import InvestorProfile from "./pages/investor/Profile";
+import InvestorStartupDiscovery from "./pages/investor/StartupDiscovery";
+import InvestorStartupShowcase from "./pages/investor/StartupShowcase";
+import InvestorPitchReview from "./pages/investor/PitchReview";
+import InvestorMessages from "./pages/investor/Messages";
+import InvestorOpportunities from "./pages/investor/Opportunities";
+import InvestorAnalytics from "./pages/investor/Analytics";
+import InvestorSettings from "./pages/investor/Settings";
+
+// ── TEAM PAGES ──
 import TeamDashboard from "./pages/team/Dashboard";
+import TeamProjects from "./pages/team/Projects";
+import TeamTasks from "./pages/team/Tasks";
+import TeamMilestones from "./pages/team/Milestones";
+import TeamCollaboration from "./pages/team/Collaboration";
+import TeamDocuments from "./pages/team/Documents";
+import TeamProgress from "./pages/team/Progress";
+import TeamMessages from "./pages/team/Messages";
+import TeamSettings from "./pages/team/Settings";
+
+// ── ADMIN PAGES ──
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminUsers from "./pages/admin/Users";
+import AdminFounders from "./pages/admin/Founders";
+import AdminMentors from "./pages/admin/Mentors";
+import AdminInvestors from "./pages/admin/Investors";
+import AdminTeamMembers from "./pages/admin/TeamMembers";
+import AdminBlogs from "./pages/admin/Blogs";
+import AdminContent from "./pages/admin/Content";
+import AdminCommunity from "./pages/admin/Community";
+import AdminRevenue from "./pages/admin/Revenue";
+import AdminAnalytics from "./pages/admin/Analytics";
+import AdminSettings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
@@ -51,7 +108,7 @@ const App = () => (
           <BrowserRouter>
             <ScrollToTop />
             <Routes>
-              {/* Public */}
+              {/* ── PUBLIC ── */}
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/pricing" element={<Pricing />} />
@@ -68,7 +125,7 @@ const App = () => (
               <Route path="/idea-validation" element={<Index />} />
               <Route path="/ai-copilot" element={<Index />} />
 
-              {/* Static */}
+              {/* ── STATIC ── */}
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/cookies" element={<CookiesPage />} />
@@ -78,72 +135,112 @@ const App = () => (
               <Route path="/help" element={<HelpPage />} />
               <Route path="/guidelines" element={<GuidelinesPage />} />
 
-              {/* Auth */}
+              {/* ── AUTH ── */}
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/role-selection" element={
-                <ProtectedRoute><RoleSelection /></ProtectedRoute>
-              } />
+              <Route path="/role-selection" element={<ProtectedRoute><RoleSelection /></ProtectedRoute>} />
 
-              {/* Founder Dashboard */}
-              <Route path="/dashboard/founder" element={
-                <ProtectedRoute allowedRoles={['founder', 'admin']}><FounderDashboard /></ProtectedRoute>
-              } />
-              <Route path="/dashboard/founder/ai-copilot" element={
-                <ProtectedRoute allowedRoles={['founder', 'admin']}><FounderAICopilot /></ProtectedRoute>
-              } />
-              {/* Founder sub-pages using same layout */}
-              {[
-                'profile', 'startup', 'idea-validation', 'market-analysis', 'competitor-analysis',
-                'swot', 'business-plan', 'bmc', 'lean-canvas', 'revenue', 'financials', 'roadmap',
-                'cofounder', 'team', 'mentors', 'investors', 'academy', 'pitch-deck', 'fundraising',
-                'tasks', 'milestones', 'okrs', 'documents', 'community', 'analytics', 'settings',
-              ].map(sub => (
-                <Route key={sub} path={`/dashboard/founder/${sub}`} element={
-                  <ProtectedRoute allowedRoles={['founder', 'admin']}><FounderDashboard /></ProtectedRoute>
-                } />
+              {/* ══════════════════════════════════════
+                  MENTOR DASHBOARD ROUTES
+              ══════════════════════════════════════ */}
+              <Route path="/dashboard/mentor" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorDashboard /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/profile" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorProfile /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/consultation-requests" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorConsultationRequests /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/bookings" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorBookings /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/one-to-one-sessions" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorOneToOneSessions /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/group-sessions" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorGroupSessions /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/reviews" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorReviews /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/revenue" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorRevenue /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/availability" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorAvailability /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/messages" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorMessages /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/analytics" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorAnalytics /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/settings" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorSettings /></ProtectedRoute>} />
+              {/* legacy alias routes */}
+              <Route path="/dashboard/mentor/requests" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorConsultationRequests /></ProtectedRoute>} />
+              <Route path="/dashboard/mentor/sessions" element={<ProtectedRoute allowedRoles={['mentor','admin']}><MentorOneToOneSessions /></ProtectedRoute>} />
+
+              {/* ══════════════════════════════════════
+                  FOUNDER DASHBOARD ROUTES
+              ══════════════════════════════════════ */}
+              <Route path="/dashboard/founder" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderDashboard /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/startup-validation" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderStartupValidation /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/business-plan" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderBusinessPlan /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/ai-copilot" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderAICopilot /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/team-building" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderTeamBuilding /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/academy" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderAcademy /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/mentor-booking" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderMentorBooking /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/fundraising" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderFundraising /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/execution-workspace" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderExecutionWorkspace /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/community" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderCommunity /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/analytics" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderAnalytics /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/profile" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderProfile /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/settings" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderSettings /></ProtectedRoute>} />
+              {/* legacy alias routes */}
+              <Route path="/dashboard/founder/idea-validation" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderStartupValidation /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/mentors" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderMentorBooking /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/investors" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderFundraising /></ProtectedRoute>} />
+              <Route path="/dashboard/founder/team" element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderTeamBuilding /></ProtectedRoute>} />
+              {['startup','market-analysis','competitor-analysis','swot','bmc','lean-canvas','revenue','financials','roadmap','cofounder','pitch-deck','tasks','milestones','okrs','documents'].map(sub => (
+                <Route key={sub} path={`/dashboard/founder/${sub}`} element={<ProtectedRoute allowedRoles={['founder','admin']}><FounderDashboard /></ProtectedRoute>} />
               ))}
 
-              {/* Mentor Dashboard */}
-              <Route path="/dashboard/mentor" element={
-                <ProtectedRoute allowedRoles={['mentor', 'admin']}><MentorDashboard /></ProtectedRoute>
-              } />
-              {['profile', 'requests', 'bookings', 'sessions', 'group-sessions', 'reviews', 'revenue', 'availability', 'messages', 'analytics', 'settings'].map(sub => (
-                <Route key={sub} path={`/dashboard/mentor/${sub}`} element={
-                  <ProtectedRoute allowedRoles={['mentor', 'admin']}><MentorDashboard /></ProtectedRoute>
-                } />
+              {/* ══════════════════════════════════════
+                  INVESTOR DASHBOARD ROUTES
+              ══════════════════════════════════════ */}
+              <Route path="/dashboard/investor" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorDashboard /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/profile" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorProfile /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/startup-discovery" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorStartupDiscovery /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/startup-showcase" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorStartupShowcase /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/pitch-review" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorPitchReview /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/messages" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorMessages /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/opportunities" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorOpportunities /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/analytics" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorAnalytics /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/settings" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorSettings /></ProtectedRoute>} />
+              {/* legacy alias routes */}
+              <Route path="/dashboard/investor/discover" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorStartupDiscovery /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/showcase" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorStartupShowcase /></ProtectedRoute>} />
+              <Route path="/dashboard/investor/pitches" element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorPitchReview /></ProtectedRoute>} />
+              {['portfolio','meetings','saved'].map(sub => (
+                <Route key={sub} path={`/dashboard/investor/${sub}`} element={<ProtectedRoute allowedRoles={['investor','admin']}><InvestorDashboard /></ProtectedRoute>} />
               ))}
 
-              {/* Investor Dashboard */}
-              <Route path="/dashboard/investor" element={
-                <ProtectedRoute allowedRoles={['investor', 'admin']}><InvestorDashboard /></ProtectedRoute>
-              } />
-              {['profile', 'discover', 'showcase', 'pitches', 'opportunities', 'portfolio', 'analytics', 'meetings', 'saved', 'messages', 'settings'].map(sub => (
-                <Route key={sub} path={`/dashboard/investor/${sub}`} element={
-                  <ProtectedRoute allowedRoles={['investor', 'admin']}><InvestorDashboard /></ProtectedRoute>
-                } />
+              {/* ══════════════════════════════════════
+                  TEAM DASHBOARD ROUTES
+              ══════════════════════════════════════ */}
+              <Route path="/dashboard/team" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamDashboard /></ProtectedRoute>} />
+              <Route path="/dashboard/team/projects" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamProjects /></ProtectedRoute>} />
+              <Route path="/dashboard/team/tasks" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamTasks /></ProtectedRoute>} />
+              <Route path="/dashboard/team/milestones" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamMilestones /></ProtectedRoute>} />
+              <Route path="/dashboard/team/collaboration" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamCollaboration /></ProtectedRoute>} />
+              <Route path="/dashboard/team/documents" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamDocuments /></ProtectedRoute>} />
+              <Route path="/dashboard/team/progress" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamProgress /></ProtectedRoute>} />
+              <Route path="/dashboard/team/messages" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamMessages /></ProtectedRoute>} />
+              <Route path="/dashboard/team/settings" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamSettings /></ProtectedRoute>} />
+              {/* legacy alias routes */}
+              <Route path="/dashboard/team/chat" element={<ProtectedRoute allowedRoles={['team','admin']}><TeamCollaboration /></ProtectedRoute>} />
+              {['profile','roadmaps','calendar','activity'].map(sub => (
+                <Route key={sub} path={`/dashboard/team/${sub}`} element={<ProtectedRoute allowedRoles={['team','admin']}><TeamDashboard /></ProtectedRoute>} />
               ))}
 
-              {/* Team Dashboard */}
-              <Route path="/dashboard/team" element={
-                <ProtectedRoute allowedRoles={['team', 'admin']}><TeamDashboard /></ProtectedRoute>
-              } />
-              {['profile', 'projects', 'tasks', 'milestones', 'roadmaps', 'documents', 'chat', 'progress', 'calendar', 'activity', 'settings'].map(sub => (
-                <Route key={sub} path={`/dashboard/team/${sub}`} element={
-                  <ProtectedRoute allowedRoles={['team', 'admin']}><TeamDashboard /></ProtectedRoute>
-                } />
-              ))}
-
-              {/* Admin Dashboard */}
-              <Route path="/dashboard/admin" element={
-                <ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>
-              } />
-              {['users', 'founders', 'mentors', 'investors', 'content', 'blog', 'community', 'revenue', 'analytics', 'settings', 'security'].map(sub => (
-                <Route key={sub} path={`/dashboard/admin/${sub}`} element={
-                  <ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>
-                } />
-              ))}
+              {/* ══════════════════════════════════════
+                  ADMIN DASHBOARD ROUTES
+              ══════════════════════════════════════ */}
+              <Route path="/dashboard/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/users" element={<ProtectedRoute allowedRoles={['admin']}><AdminUsers /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/founders" element={<ProtectedRoute allowedRoles={['admin']}><AdminFounders /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/mentors" element={<ProtectedRoute allowedRoles={['admin']}><AdminMentors /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/investors" element={<ProtectedRoute allowedRoles={['admin']}><AdminInvestors /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/team-members" element={<ProtectedRoute allowedRoles={['admin']}><AdminTeamMembers /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/blogs" element={<ProtectedRoute allowedRoles={['admin']}><AdminBlogs /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/content" element={<ProtectedRoute allowedRoles={['admin']}><AdminContent /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/community" element={<ProtectedRoute allowedRoles={['admin']}><AdminCommunity /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/revenue" element={<ProtectedRoute allowedRoles={['admin']}><AdminRevenue /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/analytics" element={<ProtectedRoute allowedRoles={['admin']}><AdminAnalytics /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/settings" element={<ProtectedRoute allowedRoles={['admin']}><AdminSettings /></ProtectedRoute>} />
+              {/* legacy alias routes */}
+              <Route path="/dashboard/admin/blog" element={<ProtectedRoute allowedRoles={['admin']}><AdminBlogs /></ProtectedRoute>} />
+              <Route path="/dashboard/admin/security" element={<ProtectedRoute allowedRoles={['admin']}><AdminSettings /></ProtectedRoute>} />
 
               <Route path="*" element={<NotFound />} />
             </Routes>
