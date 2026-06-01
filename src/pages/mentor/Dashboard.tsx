@@ -85,7 +85,7 @@ const MentorDashboard = () => {
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#1e1b4b]" />
                 </div>
                 <div>
-                  <p className="text-purple-300 text-sm font-medium mb-0.5">Good morning 👋</p>
+                  <p className="text-purple-300 text-sm font-medium mb-0.5">Good morning</p>
                   <h1 className="text-2xl font-bold text-white font-['Space_Grotesk']">{user?.name || 'Mentor'}</h1>
                   <p className="text-purple-200/60 text-sm mt-1">
                     <span className="text-white font-semibold">{requests.length} new requests</span> · <span className="text-white font-semibold">2 sessions</span> this week

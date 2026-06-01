@@ -318,7 +318,9 @@ const Home = () => {
           <div className="glass rounded-2xl p-3.5 w-52 border border-white/10 shadow-xl">
             <p className="text-white/50 text-[10px] font-semibold uppercase tracking-wider mb-2">Mentor Match</p>
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-sm">👩</div>
+              <div className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center overflow-hidden">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=aisha" alt="Dr. Aisha Khan" className="w-full h-full" />
+              </div>
               <div>
                 <p className="text-white text-sm font-semibold">Dr. Aisha Khan</p>
                 <div className="flex items-center gap-1">

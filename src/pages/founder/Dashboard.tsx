@@ -101,7 +101,7 @@ const FounderDashboard = () => {
                   <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#0f1749]" />
                 </div>
                 <div>
-                  <p className="text-blue-300 text-sm font-medium mb-0.5">Welcome back 👋</p>
+                  <p className="text-blue-300 text-sm font-medium mb-0.5">Welcome back</p>
                   <h1 className="text-2xl font-bold text-white font-['Space_Grotesk']">{user?.name || 'Founder'}</h1>
                   <p className="text-blue-200/60 text-sm mt-1">
                     <span className="text-white font-semibold">{startup.name}</span> is growing at{' '}
